@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: smartbeacon-db
+    environment:
+      POSTGRES_DB: smartbeacon
+      POSTGRES_USER: smartbeacon
+      POSTGRES_PASSWORD: G4jc7GY9CG
+    volumes:
+      - traccar-db-data:/var/lib/postgresql/data    
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  smartbeacon-server:
+    image: traccar/traccar:latest
+    container_name: smartbeacon-server
+    volumes:
+      - ./conf/traccar.xml:/opt/traccar/conf/traccar.xml
+    depends_on:
+      - db
+    ports:
+      - "8082:8082"   # Web UI
+      - "5000-5150:5000-5150/udp" # Device ports (adjust as needed)
+      - "5055:5055"   # HTTP protocol port for device API- 
+    restart: unless-stopped
+    
+
+  smartbeacon-pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: smartbeacon-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: kabuchanga@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: G4jc7GY9CG
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    restart: unless-stopped
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+  traccar-db-data:
+  pgadmin-data:

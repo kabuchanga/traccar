@@ -1,0 +1,4 @@
+curl -X POST 'http://localhost:5055/?id=smartbeaconid0001&lat=-1.2564&lon=36.8219&alt=0.0&speed=0'
+
+
+Invoke-RestMethod -Uri "http://localhost:5055/?id=smartbeaconid0001&lat=-1.4564&lon=36.8219&alt=0.0&speed=0" -Method POST
